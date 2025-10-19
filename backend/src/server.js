@@ -29,8 +29,12 @@ const startServer = async () =>{
 
         }
     }catch(e){
+        console.error("Error starting server:",error);
+        process.exit(1);//exit the process with a failure code
 
     }
 }
 
 startServer()
+
+export default app;
