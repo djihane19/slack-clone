@@ -139,7 +139,8 @@
   color: white;
   font-size: 1.125rem;
   font-weight: 600;
-  padding: 1.25rem 2.5rem;
+  width: 100%;
+  padding: 1.25rem 4rem;
   border-radius: 1rem;
   border: 1px solid rgba(114, 9, 183, 0.3);
   cursor: pointer;
@@ -178,7 +179,7 @@
 }
 
 .cta-button:hover .button-arrow {
-  transform: translateX(0.25rem);
+  transform: translateX(2.25rem);
 }
 
 .auth-image-container {
