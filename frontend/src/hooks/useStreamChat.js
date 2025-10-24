@@ -28,17 +28,30 @@ export const useStreamChat = () =>{
     //init steam chat client 
 
     useEffect(()=>{
-        const initChat = async()=>{
-            if (!tokenData?.token || !user) return;
+        
+            if (!tokenData?.token || !user?.id || !STREAM_API_KEY) return;
 
+            const client = StreamChat.getInstance(STREAM_API_KEY)
+            let cancelled = false
+
+            const connect = async () =>{
             try{
-                const client= StreamChat.getInstance(STREAM_API_KEY)
+                
                 await client.connectUser({
                     id:user.id,
-                    name: user.fullName,
-                    image:user.imageUrl
-                })
-                setChatClient(client)
+                    name: 
+                       user.fullName ??
+                       user.username ??
+                       user.primaryEmailAddress?.emailAddress ??
+                       user.id,
+                    image:user.imageUrl ?? undefined,
+                },
+                tokenData.token
+            );
+            if(!cancelled){
+                 setChatClient(client)
+            }
+               
 
             }catch(e){
                 console.log('Error connecting to stream',e)
@@ -52,13 +65,14 @@ export const useStreamChat = () =>{
                 })
             }
         }
-        initChat()
+        connect()
 
         //cleanup for performance reason
         return () =>{
-            if(chatClient) chatClient.disconnectUser()
+            cancelled = true;
+            client.disconnectUser()
         }
-    },[tokenData,user,chatClient]);
+    },[tokenData?.token,user?.id]);
 
     return {chatClient,isLoading:tokenLoading,error:tokenError}
 }
